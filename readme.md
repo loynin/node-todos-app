@@ -8,10 +8,13 @@
         - Run `db.Todos.find()` // Select record from the database
 5. Install Robomongo for GUI mongo management
     get it from robomongo.org
-    
+
 /// ------------------------
 
 TODO APP
 --------
 
 1. Install mongodb by `npm install mongodb --save`
+2. Install mongoose by `npm i mongoose --save`
+3. Install express by `npm i express --save`
+4. Install body-parser `npm i body-parser --save`
