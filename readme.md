@@ -18,3 +18,4 @@ TODO APP
 2. Install mongoose by `npm i mongoose --save`
 3. Install express by `npm i express --save`
 4. Install body-parser `npm i body-parser --save`
+5. Install test libraries `npm i expect mocha nodemon supertest --save-dev`
