@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const {mongoose} = require('./db/mongoose.js')
 const {Todo} = require('./models/todo.js');
 const {User} = require('./models/user.js');
+const {ObjectID} = require('mongodb');
 
 const app = express();
 
@@ -20,10 +21,6 @@ app.post('/todos', (req, res) => {
     });
 })
 
-// app.get('/todos', (req, res) => {
-//     res.status(200).send("hello");
-// })
-
 app.get('/todos', (req, res) => {
     Todo.find().then((todos) => {
         res.status(200).send({todos});
@@ -32,7 +29,23 @@ app.get('/todos', (req, res) => {
     });
 })
 
-app.listen(3000, () => {
+app.get('/todos/:id', (req, res) => {
+    const id = req.params.id;
+    if (!ObjectID.isValid(id)){
+        return res.status(404).send(`The ${id} is not a valid ID`);
+    } 
+    Todo.findById(id).then((todo) => {
+        if (todo) {
+            res.status(200).send({todo});
+        } else {
+            res.status(404).send();
+        }
+    }).catch( () => {
+        res.status(404).send();
+    });
+});
+
+app.listen(3001, () => {
     console.log('Start the server on port 3000');
 });
 
