@@ -173,6 +173,5 @@ describe('PATCH /todos/:id', () => {
                 expect(res.body.todo.completedAt).toBeFalsy;
             })
             .end(done);
-
     })
 })
