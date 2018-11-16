@@ -21,3 +21,5 @@ TODO APP
 5. Install test libraries `npm i expect mocha nodemon supertest --save-dev`
 6. Install validator `npm i validator --save`
 7. Install jwt `npm i jsonwebtoken --save`
+8. Install bcryptjs `npm i bcryptjs --save`
+
