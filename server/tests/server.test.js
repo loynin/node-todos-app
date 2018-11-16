@@ -1,18 +1,41 @@
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
+const jwt = require('jsonwebtoken');
 
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
+const userOneId = new ObjectID();
+const userTwoId = new ObjectID();
+
+const users = [{
+    _id: userOneId,
+    email: 'steven@gmail.com',
+    password: 'userOnePass',
+    tokens: [{
+        access: 'auth',
+        token: jwt.sign({_id: userOneId, access: 'auth'}, 'abc123').toString()
+    }]
+},{
+    _id: userTwoId,
+    emai: 'panhchary@gmail.com',
+    password: 'useTwoPass',
+    tokens: [{
+        access: 'auth',
+        token: jwt.sign({_id: userTwoId, access: 'auth'}, 'abc123').toString()
+    }]
+}]
 
 const todos =[{
     _id: new ObjectID(),
-    text: 'first todo test'
+    text: 'first todo test',
+    _creator: userOneId
 },{
     _id: new ObjectID(),
     text: 'second todo test',
     completed: true,
-    completedAt: 222
+    completedAt: 222,
+    _creator: userTwoId
 }];
 
 beforeEach((done) => {
@@ -29,6 +52,7 @@ describe('POST /todos', () => {
 
         request(app)
         .post('/todos')
+        .set('x-auth', users[0].tokens[0].token)
         .send({text})
         .expect(200)
         .expect((res) => {
@@ -51,6 +75,7 @@ describe('POST /todos', () => {
         var text = "";
         request(app)
             .post('/todos')
+            .set('x-auth', users[0].tokens[0].token)
             .send({text})
             .expect(400)
             .end((err, res) => {
@@ -68,6 +93,7 @@ describe('GET /todo', () => {
     it('should get all todos', (done) => {
         request(app)
             .get('/todos')
+            .set('x-auth', users[0].tokens[0].token)
             .expect(200)
             .expect((res) => {
                 expect(res.body.todos.length).toBe(2);
